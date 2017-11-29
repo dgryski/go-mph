@@ -7,13 +7,13 @@ import (
 )
 
 type Table struct {
-	values []int
-	seeds  []int64
+	values []int32
+	seeds  []int32
 }
 
 type entry struct {
 	key  string
-	idx  int
+	idx  int32
 	hash uint64
 }
 
@@ -25,20 +25,20 @@ func New(keys []string) *Table {
 		hash := metro.Hash64Str(k, 0)
 		i := hash % size
 		// idx+1 so we can identify empty entries in the table with 0
-		h[i] = append(h[i], entry{k, idx + 1, hash})
+		h[i] = append(h[i], entry{k, int32(idx) + 1, hash})
 	}
 
 	sort.Slice(h, func(i, j int) bool { return len(h[i]) > len(h[j]) })
 
-	values := make([]int, size)
-	seeds := make([]int64, size)
+	values := make([]int32, size)
+	seeds := make([]int32, size)
 
 	var hidx int
 	for hidx = 0; hidx < len(h) && len(h[hidx]) > 1; hidx++ {
 		subkeys := h[hidx]
 
 		var seed uint64
-		entries := make(map[uint64]int)
+		entries := make(map[uint64]int32)
 
 	newseed:
 		for {
@@ -70,7 +70,7 @@ func New(keys []string) *Table {
 		// and assign this seed value for every subkey
 		for _, k := range subkeys {
 			i := k.hash % size
-			seeds[i] = int64(seed)
+			seeds[i] = int32(seed)
 		}
 	}
 
@@ -98,7 +98,7 @@ func New(keys []string) *Table {
 		values[dst] = k.idx - 1
 
 		// store offset in seed as a negative; -1 so even slot 0 is negative
-		seeds[i] = -int64(dst + 1)
+		seeds[i] = -int32(dst + 1)
 	}
 
 	return &Table{
@@ -107,7 +107,7 @@ func New(keys []string) *Table {
 	}
 }
 
-func (t *Table) Query(k string) int {
+func (t *Table) Query(k string) int32 {
 	size := uint64(len(t.values))
 	hash := metro.Hash64Str(k, 0)
 	i := hash & (size - 1)

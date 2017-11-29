@@ -52,13 +52,13 @@ func TestMPH(t *testing.T) {
 	for i, k := range keys {
 		got := tab.Query(k)
 
-		if got != i {
+		if got != int32(i) {
 			t.Errorf("Lookup(%q)=%v, want %v", k, got, i)
 		}
 	}
 }
 
-var sink int
+var sink int32
 
 func BenchmarkMPH(b *testing.B) {
 	keys := loadKeys(b)
@@ -77,10 +77,10 @@ func BenchmarkMPH(b *testing.B) {
 func BenchmarkMap(b *testing.B) {
 	keys := loadKeys(b)
 
-	m := make(map[string]int, len(keys))
+	m := make(map[string]int32, len(keys))
 
 	for i, k := range keys {
-		m[k] = i
+		m[k] = int32(i)
 	}
 
 	b.ResetTimer()
