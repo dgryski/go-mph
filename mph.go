@@ -1,3 +1,4 @@
+// Package mph implements a hash/displace minimal perfect hash function.
 package mph
 
 import (
@@ -6,6 +7,7 @@ import (
 	"github.com/dgryski/go-metro"
 )
 
+// Table stores the values for the hash function
 type Table struct {
 	values []int32
 	seeds  []int32
@@ -17,6 +19,7 @@ type entry struct {
 	hash uint64
 }
 
+// New constructs a minimal perfect hash function for the set of keys which returns the index of item in the keys array.
 func New(keys []string) *Table {
 	size := uint64(nextPower2(len(keys)))
 
@@ -107,6 +110,7 @@ func New(keys []string) *Table {
 	}
 }
 
+// Query looks up an entry in the table and return the index.
 func (t *Table) Query(k string) int32 {
 	size := uint64(len(t.values))
 	hash := metro.Hash64Str(k, 0)
