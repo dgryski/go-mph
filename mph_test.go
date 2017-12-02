@@ -44,15 +44,11 @@ func loadBigKeys(tb testing.TB, filename string) []string {
 }
 
 func TestMPH(t *testing.T) {
-
 	keys := loadKeys(t)
-
 	tab := New(keys)
 
 	for i, k := range keys {
-		got := tab.Query(k)
-
-		if got != int32(i) {
+		if got := tab.Query(k); got != int32(i) {
 			t.Errorf("Lookup(%q)=%v, want %v", k, got, i)
 		}
 	}
@@ -67,7 +63,6 @@ func BenchmarkMPH(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-
 		for _, k := range keys {
 			sink += tab.Query(k)
 		}
@@ -76,9 +71,7 @@ func BenchmarkMPH(b *testing.B) {
 
 func BenchmarkMap(b *testing.B) {
 	keys := loadKeys(b)
-
 	m := make(map[string]int32, len(keys))
-
 	for i, k := range keys {
 		m[k] = int32(i)
 	}
@@ -86,7 +79,6 @@ func BenchmarkMap(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-
 		for _, k := range keys {
 			sink += m[k]
 		}
