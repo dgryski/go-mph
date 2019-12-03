@@ -3,6 +3,8 @@ package mph
 import (
 	"bufio"
 	"flag"
+	"fmt"
+	"math/rand"
 	"os"
 	"testing"
 )
@@ -43,14 +45,33 @@ func loadBigKeys(tb testing.TB, filename string) []string {
 	return k
 }
 
-func TestMPH(t *testing.T) {
-	keys := loadKeys(t)
+func testMPH(t *testing.T, keys []string) {
 	tab := New(keys)
-
 	for i, k := range keys {
 		if got := tab.Query(k); got != int32(i) {
 			t.Errorf("Lookup(%q)=%v, want %v", k, got, i)
 		}
+	}
+}
+
+func TestMPH(t *testing.T) {
+	keys := loadKeys(t)
+	testMPH(t, keys)
+}
+
+func TestMPHRandomSubsets(t *testing.T) {
+	const iterations = 10000
+
+	keys := loadKeys(t)
+
+	for i := 0; i < iterations; i++ {
+		perm := rand.Perm(rand.Intn(len(keys)))
+		subkeys := make([]string, len(perm))
+		for i, v := range perm {
+			subkeys[i] = keys[v]
+		}
+
+		t.Run(fmt.Sprintf("%d-%d\n", i, len(subkeys)), func(t *testing.T) { testMPH(t, subkeys) })
 	}
 }
 

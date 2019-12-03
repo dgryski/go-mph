@@ -88,7 +88,7 @@ func New(keys []string) *Table {
 		}
 	}
 
-	for len(h[hidx]) > 0 {
+	for hidx < len(h) && len(h[hidx]) > 0 {
 		k := h[hidx][0]
 		i := k.hash % size
 		hidx++
