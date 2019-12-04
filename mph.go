@@ -14,7 +14,6 @@ type Table struct {
 }
 
 type entry struct {
-	key  string
 	idx  int32
 	hash uint64
 }
@@ -28,7 +27,7 @@ func New(keys []string) *Table {
 		hash := metro.Hash64Str(k, 0)
 		i := hash % size
 		// idx+1 so we can identify empty entries in the table with 0
-		h[i] = append(h[i], entry{k, int32(idx) + 1, hash})
+		h[i] = append(h[i], entry{int32(idx) + 1, hash})
 	}
 
 	sort.Slice(h, func(i, j int) bool { return len(h[i]) > len(h[j]) })
