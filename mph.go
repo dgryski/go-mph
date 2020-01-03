@@ -64,12 +64,15 @@ func New(keys []string) *Table {
 			break
 		}
 
-		// mark subkey spaces as claimed
+		// mark subkey spaces as claimed ...
 		for k, v := range entries {
 			values[k] = v
 		}
 
-		// and assign this seed value for these subkeys
+		// ... and assign this seed value for every subkey
+		// NOTE(dgryski): While k.hash is different for each entry, i = k.hash % size is the same.
+		// We don't need to loop over the entire slice, we can just take the seed from the first entry.
+
 		i := subkeys[0].hash % size
 		seeds[i] = int32(seed)
 	}
