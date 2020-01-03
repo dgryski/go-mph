@@ -69,11 +69,9 @@ func New(keys []string) *Table {
 			values[k] = v
 		}
 
-		// and assign this seed value for every subkey
-		for _, k := range subkeys {
-			i := k.hash % size
-			seeds[i] = int32(seed)
-		}
+		// and assign this seed value for these subkeys
+		i := subkeys[0].hash % size
+		seeds[i] = int32(seed)
 	}
 
 	// find the unassigned entries in the table
