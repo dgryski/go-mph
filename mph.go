@@ -9,8 +9,8 @@ import (
 
 // Table stores the values for the hash function
 type Table struct {
-	values []int32
-	seeds  []int32
+	Values []int32
+	Seeds  []int32
 }
 
 type entry struct {
@@ -105,23 +105,23 @@ func New(keys []string) *Table {
 	}
 
 	return &Table{
-		values: values,
-		seeds:  seeds,
+		Values: values,
+		Seeds:  seeds,
 	}
 }
 
 // Query looks up an entry in the table and return the index.
 func (t *Table) Query(k string) int32 {
-	size := uint64(len(t.values))
+	size := uint64(len(t.Values))
 	hash := metro.Hash64Str(k, 0)
 	i := hash & (size - 1)
-	seed := t.seeds[i]
+	seed := t.Seeds[i]
 	if seed < 0 {
-		return t.values[-seed-1]
+		return t.Values[-seed-1]
 	}
 
 	i = xorshiftMult64(uint64(seed)+hash) & (size - 1)
-	return t.values[i]
+	return t.Values[i]
 }
 
 func xorshiftMult64(x uint64) uint64 {
