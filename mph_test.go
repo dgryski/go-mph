@@ -60,9 +60,9 @@ func TestMPH(t *testing.T) {
 }
 
 func TestMPHRandomSubsets(t *testing.T) {
-	const iterations = 10000
-
 	keys := loadKeys(t)
+
+	iterations := 100 * len(keys)
 
 	for i := 0; i < iterations; i++ {
 		perm := rand.Perm(rand.Intn(len(keys)))
