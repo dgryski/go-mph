@@ -71,7 +71,7 @@ func TestMPHRandomSubsets(t *testing.T) {
 			subkeys[i] = keys[v]
 		}
 
-		t.Run(fmt.Sprintf("%d-%d\n", i, len(subkeys)), func(t *testing.T) { testMPH(t, subkeys) })
+		t.Run(fmt.Sprintf("%d-%d", i, len(subkeys)), func(t *testing.T) { testMPH(t, subkeys) })
 	}
 }
 
